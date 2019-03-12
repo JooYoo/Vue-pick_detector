@@ -8,7 +8,7 @@
               <v-flex xs5>
                 <div>
                   <button onclick="toggleVideo()" id="isOnVideo" type="button" disabled>Toggle Video</button>
-                  <div id="info">loading model ..</div>
+                  <div id="info">{{info}}</div>
                 </div>
               </v-flex>
               <v-flex xs7>
@@ -31,67 +31,79 @@
 </template>
 
 <script>
-export default {};
-import * as handTrack from "handtrackjs";
+// import * as handTrack from "handtrackjs";
+export default {
+ 
+  data() {
+    return {
+      info: 'Model loading ...'
+    };
+  },
+  computed:{
 
-window.addEventListener("load", function(event) {
-  const video = document.getElementById("video");
-  const canvas = document.getElementById("canvas");
-  const context = canvas.getContext("2d");
-  let isOnVideo = document.getElementById("isOnVideo");
-  let info = document.getElementById("info");
+  },
 
-  let isVideo = false;
-  let model = null;
+  methods: {}
+};
 
-  const modelParams = {
-    flipHorizontal: true,
-    maxNumBoxes: 20,
-    iouThreshold: 0.1,
-    scoreThreshold: 0.6
-  };
+// window.addEventListener("load", function(event) {
+//   const video = document.getElementById("video");
+//   const canvas = document.getElementById("canvas");
+//   const context = canvas.getContext("2d");
+//   let isOnVideo = document.getElementById("isOnVideo");
+//   let info = document.getElementById("info");
 
-  // Load model.
-  handTrack.load(modelParams).then(loadModel => {
-    model = loadModel;
-    info.innerText = "Loaded Model!";
-    isOnVideo.disabled = false;
-  });
+//   let isVideo = false;
+//   let model = null;
 
-  function toggleVideo() {
-    if (!isVideo) {
-      info.innerText = "Starting video";
-      startVideo();
-    } else {
-      info.innerText = "Stopping video";
-      handTrack.stopVideo(video);
-      isVideo = false;
-      info.innerText = "Video stopped";
-    }
-  }
+//   const modelParams = {
+//     flipHorizontal: true,
+//     maxNumBoxes: 20,
+//     iouThreshold: 0.1,
+//     scoreThreshold: 0.6
+//   };
 
-  function startVideo() {
-    handTrack.startVideo(video).then(function(status) {
-      if (status) {
-        info.innerText = "Video started. Now tracking";
-        isVideo = true;
-        runDetection();
-      } else {
-        info.innerText = "Please enable video";
-      }
-    });
-  }
+//   // Load model.
+//   handTrack.load(modelParams).then(loadModel => {
+//     model = loadModel;
+//     info.innerText = "Loaded Model!";
+//     isOnVideo.disabled = false;
+//   });
 
-  function runDetection() {
-    model.detect(video).then(predictions => {
-      console.log("Predictions: ", predictions[0]);
-      model.renderPredictions(predictions, canvas, context, video);
-      if (isVideo) {
-        requestAnimationFrame(runDetection);
-      }
-    });
-  }
-});
+//   // function toggleVideo() {
+//   //   if (!isVideo) {
+//   //     info.innerText = "Starting video";
+//   //     startVideo();
+//   //   } else {
+//   //     info.innerText = "Stopping video";
+//   //     handTrack.stopVideo(video);
+//   //     isVideo = false;
+//   //     info.innerText = "Video stopped";
+//   //   }
+//   // }
+
+//   // function startVideo() {
+//   //   handTrack.startVideo(video).then(function(status) {
+//   //     if (status) {
+//   //       info.innerText = "Video started. Now tracking";
+//   //       isVideo = true;
+//   //       runDetection();
+//   //     } else {
+//   //       info.innerText = "Please enable video";
+//   //     }
+//   //   });
+//   // }
+
+//   function runDetection() {
+//     model.detect(video).then(predictions => {
+//       console.log("Predictions: ", predictions[0]);
+//       model.renderPredictions(predictions, canvas, context, video);
+//       if (isVideo) {
+//         requestAnimationFrame(runDetection);
+//       }
+//     });
+//   }
+// });
 </script>
 
 <style scoped>
